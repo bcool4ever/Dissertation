@@ -1,0 +1,1 @@
+__IntegralAS_6e4a7791534d11e6a12300259086ccde_1190({"action":"passed","geo":{"dma":"ZZ","state":"07","country":"IE"},"risk":{"vio":"low risk","drg":"low risk","alc":"low risk","off":"low risk","dlm":"low risk","adt":"low risk","hat":"low risk"},"rsa":1000})

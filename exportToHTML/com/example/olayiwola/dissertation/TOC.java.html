@@ -1,0 +1,180 @@
+<html>
+<head>
+<title>TOC.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+TOC.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.olayiwola.dissertation; 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.DialogInterface; 
+</span><span class="s0">import </span><span class="s1">android.content.pm.ActivityInfo; 
+</span><span class="s0">import </span><span class="s1">android.support.annotation.NonNull; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.widget.AdapterView; 
+</span><span class="s0">import </span><span class="s1">android.widget.ArrayAdapter; 
+</span><span class="s0">import </span><span class="s1">android.widget.ListView; 
+</span><span class="s0">import </span><span class="s1">android.widget.SearchView; 
+ 
+</span><span class="s0">import </span><span class="s1">java.lang.reflect.Array; 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.app.AlertDialog; 
+</span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+ 
+</span><span class="s0">import </span><span class="s1">com.firebase.client.DataSnapshot; 
+</span><span class="s0">import </span><span class="s1">com.firebase.client.Firebase; 
+</span><span class="s0">import </span><span class="s1">com.firebase.client.FirebaseError; 
+</span><span class="s0">import </span><span class="s1">com.firebase.client.ValueEventListener; 
+</span><span class="s0">import </span><span class="s1">com.google.firebase.auth.FirebaseAuth; 
+</span><span class="s0">import </span><span class="s1">com.google.firebase.auth.FirebaseUser; 
+</span><span class="s0">import </span><span class="s1">com.shaded.fasterxml.jackson.annotation.JsonIgnoreProperties; 
+ 
+</span><span class="s0">import </span><span class="s1">data.subjectData; 
+</span><span class="s0">import </span><span class="s1">data.topicData; 
+@JsonIgnoreProperties(ignoreUnknown = </span><span class="s0">true</span><span class="s1">) 
+</span><span class="s0">public class </span><span class="s1">TOC </span><span class="s0">extends </span><span class="s1">AppCompatActivity { 
+ 
+    ListView listView; 
+    SearchView searchView; 
+    ArrayAdapter arrayAdapter; 
+    </span><span class="s0">public </span><span class="s1">ArrayList&lt;String&gt; TOC; 
+    String pname,subName; 
+    Firebase tb; 
+    </span><span class="s0">private </span><span class="s1">FirebaseAuth auth; 
+    </span><span class="s0">private </span><span class="s1">FirebaseAuth.AuthStateListener authListener; 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
+        </span><span class="s2">//makes sure my app runs in portrait only</span><span class="s1"> 
+        setContentView(R.layout.activity_toc); 
+        Intent intent = getIntent(); 
+        listView = (ListView)findViewById(R.id.listView); 
+        searchView = (SearchView)findViewById(R.id.searchView); 
+        TextView textView = (TextView)findViewById(R.id.txtProfile); 
+        TOC = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+ 
+        </span><span class="s2">/*TOC.add(&quot;Concepts of matter&quot;); 
+        TOC.add(&quot;Fundamental and derived quantities and units&quot;); 
+        TOC.add(&quot;Position, distance and displacement&quot;); 
+        TOC.add(&quot;Mass and weight&quot;); 
+        TOC.add(&quot;Time&quot;); 
+        TOC.add(&quot;Fluids at rest&quot;); 
+        TOC.add(&quot;Motion&quot;); 
+        TOC.add(&quot;Speed and velocity&quot;); 
+        TOC.add(&quot;Rectilinear acceleration&quot;); 
+        TOC.add(&quot;Scalars and vectors&quot;);*/</span><span class="s1"> 
+        subName = intent.getStringExtra(</span><span class="s3">&quot;Subject&quot;</span><span class="s1">); 
+ 
+        Firebase.setAndroidContext(</span><span class="s0">this</span><span class="s1">); 
+        tb = </span><span class="s0">new </span><span class="s1">Firebase(addsubject.DB_URL+</span><span class="s3">&quot;/Subjects&quot;</span><span class="s1">); 
+ 
+        </span><span class="s0">this</span><span class="s1">.retrieve(); 
+        </span><span class="s2">//arrayAdapter = new ArrayAdapter&lt;String&gt;(this,android.R.layout.simple_list_item_1,TOC);</span><span class="s1"> 
+ 
+ 
+        </span><span class="s2">//listView.setAdapter(arrayAdapter);</span><span class="s1"> 
+ 
+ 
+        textView.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+                auth.signOut(); 
+                Intent intent = </span><span class="s0">new </span><span class="s1">Intent(TOC.</span><span class="s0">this</span><span class="s1">,MainActivity.</span><span class="s0">class</span><span class="s1">); 
+                startActivity(intent); 
+            } 
+        }); 
+        searchView.setOnQueryTextListener(</span><span class="s0">new </span><span class="s1">SearchView.OnQueryTextListener() { 
+            @Override 
+            </span><span class="s0">public boolean </span><span class="s1">onQueryTextSubmit(String text) { 
+                </span><span class="s0">return false</span><span class="s1">; 
+            } 
+ 
+            @Override 
+            </span><span class="s0">public boolean </span><span class="s1">onQueryTextChange(String Text) { 
+                arrayAdapter.getFilter().filter(Text); 
+                </span><span class="s0">return false</span><span class="s1">; 
+            } 
+        }); 
+        listView.setOnItemClickListener(</span><span class="s0">new </span><span class="s1">AdapterView.OnItemClickListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onItemClick(AdapterView&lt;?&gt; parent, View view, </span><span class="s0">int </span><span class="s1">position, </span><span class="s0">long </span><span class="s1">id) { 
+                </span><span class="s0">final </span><span class="s1">String topic = parent.getItemAtPosition(position).toString(); 
+                </span><span class="s0">final int </span><span class="s1">pos = parent.getPositionForView(view); 
+                </span><span class="s2">//view represents the row of selected item</span><span class="s1"> 
+                </span><span class="s0">new </span><span class="s1">AlertDialog.Builder(TOC.</span><span class="s0">this</span><span class="s1">) 
+                        .setIcon(android.R.drawable.ic_dialog_alert) 
+                        .setTitle(</span><span class="s3">&quot;Choose a mode&quot;</span><span class="s1">) 
+                        .setMessage(</span><span class="s3">&quot;Which mode would you like for &quot; </span><span class="s1">+ topic) 
+                        .setPositiveButton(</span><span class="s3">&quot;Revision&quot;</span><span class="s1">, </span><span class="s0">new </span><span class="s1">DialogInterface.OnClickListener() { 
+                            @Override 
+                            </span><span class="s0">public void </span><span class="s1">onClick(DialogInterface dialog, </span><span class="s0">int </span><span class="s1">which) { 
+                                Intent intent = </span><span class="s0">new </span><span class="s1">Intent(TOC.</span><span class="s0">this</span><span class="s1">, TOPIC.</span><span class="s0">class</span><span class="s1">); 
+                                intent.putExtra(</span><span class="s3">&quot;topic title&quot;</span><span class="s1">, topic); 
+                                intent.putExtra(</span><span class="s3">&quot;Subject&quot;</span><span class="s1">,subName); 
+                                startActivity(intent); 
+                                finish(); 
+                            } 
+                        }) 
+                        .setNegativeButton(</span><span class="s3">&quot;Test&quot;</span><span class="s1">, </span><span class="s0">new </span><span class="s1">DialogInterface.OnClickListener() { 
+                            @Override 
+                            </span><span class="s0">public void </span><span class="s1">onClick(DialogInterface dialog, </span><span class="s0">int </span><span class="s1">which) { 
+                                Intent intent = </span><span class="s0">new </span><span class="s1">Intent(TOC.</span><span class="s0">this</span><span class="s1">, Quiz.</span><span class="s0">class</span><span class="s1">); 
+                                intent.putExtra(</span><span class="s3">&quot;topic title&quot;</span><span class="s1">, topic); 
+ 
+                                intent.putExtra(</span><span class="s3">&quot;topic position&quot;</span><span class="s1">, String.valueOf(pos)); 
+                                startActivity(intent); 
+                                finish(); 
+                            } 
+                        }) 
+                        .show(); 
+ 
+            } 
+        }); 
+    } 
+    </span><span class="s0">private void </span><span class="s1">retrieve(){ 
+        tb.addValueEventListener(</span><span class="s0">new </span><span class="s1">ValueEventListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onDataChange(DataSnapshot dataSnapshot) { 
+                getUpdate(dataSnapshot); 
+            } 
+ 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onCancelled(FirebaseError firebaseError) { 
+ 
+            } 
+        }); 
+    } 
+    </span><span class="s0">private void </span><span class="s1">getUpdate(DataSnapshot dataSnapshot){ 
+        TOC.clear(); 
+        DataSnapshot topNames = dataSnapshot.child(subName); 
+        </span><span class="s0">for</span><span class="s1">(DataSnapshot data : topNames.getChildren()){ 
+            topicData td = (data.child(</span><span class="s3">&quot;topicName&quot;</span><span class="s1">).getValue(topicData.</span><span class="s0">class</span><span class="s1">)); 
+            TOC.add(td.getTopicName()); 
+        } 
+        </span><span class="s0">if</span><span class="s1">(TOC.size() &gt; </span><span class="s4">0</span><span class="s1">){ 
+            arrayAdapter = </span><span class="s0">new </span><span class="s1">ArrayAdapter(TOC.</span><span class="s0">this</span><span class="s1">,android.R.layout.simple_list_item_1,TOC); 
+            listView.setAdapter(arrayAdapter); 
+        } 
+    } 
+} 
+</span></pre>
+</body>
+</html>

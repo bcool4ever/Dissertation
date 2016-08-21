@@ -1,0 +1,240 @@
+<html>
+<head>
+<title>TOPIC.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(0,128,0); font-weight: bold; }
+.s3 { color: rgb(128,128,128); font-style: italic; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+TOPIC.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.olayiwola.dissertation; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.Dialog; 
+</span><span class="s0">import </span><span class="s1">android.content.Context; 
+</span><span class="s0">import </span><span class="s1">android.content.SharedPreferences; 
+</span><span class="s0">import </span><span class="s1">android.content.pm.ActivityInfo; 
+</span><span class="s0">import </span><span class="s1">android.support.v4.app.Fragment; 
+</span><span class="s0">import </span><span class="s1">android.support.v4.app.FragmentStatePagerAdapter; 
+</span><span class="s0">import </span><span class="s1">android.support.v4.view.ViewPager; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.LinearLayout; 
+</span><span class="s0">import </span><span class="s1">android.widget.MediaController; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.widget.Toolbar; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.widget.AdapterView; 
+</span><span class="s0">import </span><span class="s1">android.widget.ArrayAdapter; 
+</span><span class="s0">import </span><span class="s1">android.widget.ListView; 
+</span><span class="s0">import </span><span class="s1">android.widget.RatingBar; 
+</span><span class="s0">import </span><span class="s1">android.widget.TextView; 
+</span><span class="s0">import </span><span class="s1">android.widget.Toast; 
+</span><span class="s0">import </span><span class="s1">android.widget.VideoView; 
+ 
+</span><span class="s0">import </span><span class="s1">com.firebase.client.Firebase; 
+ 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+ 
+</span><span class="s0">import </span><span class="s1">data.ratingData; 
+ 
+ 
+</span><span class="s0">public class </span><span class="s1">TOPIC </span><span class="s0">extends </span><span class="s1">AppCompatActivity { 
+ 
+ 
+    ListView listView; 
+    VideoView videoView; 
+    RatingBar ratingBar; 
+    LinearLayout ratingLayout; 
+    LinearLayout linearLayout; 
+    Button btnRate; 
+    Button btnRating; 
+    SharedPreferences sharedPreferences; 
+    Button btnComment; 
+    TextView textView; 
+    ArrayList&lt;String&gt; topicVideo; 
+    ArrayAdapter&lt;String&gt; arrayAdapter; 
+    MediaController mediaController; 
+    String topicTitle; 
+    String fileName = </span><span class="s2">&quot;GCSE_Physics_ Atoms.html&quot;</span><span class="s1">; 
+    String filePath = </span><span class="s2">&quot;file:android_asset/&quot;</span><span class="s1">; 
+    String file = filePath + fileName; 
+    String[] toVisit = { 
+            file, 
+            </span><span class="s2">&quot;http://www.google.com&quot;</span><span class="s1">, 
+            </span><span class="s2">&quot;http://www.reddit.com/.compact&quot;</span><span class="s1">, 
+            </span><span class="s2">&quot;http://www.dribbble.com&quot;</span><span class="s1"> 
+    }; 
+    ViewPager viewPager; 
+    FragmentStatePagerAdapter adapter; 
+    </span><span class="s0">boolean </span><span class="s1">scrolledOnLastPage; 
+ 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
+        setContentView(R.layout.activity_topic); 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar); 
+        setSupportActionBar(toolbar); 
+        Firebase.setAndroidContext(</span><span class="s0">this</span><span class="s1">); 
+        mediaController = </span><span class="s0">new </span><span class="s1">MediaController(</span><span class="s0">this</span><span class="s1">); 
+        viewPager = (ViewPager) findViewById(R.id.pager); 
+        btnRate = (Button) findViewById(R.id.btnRate); 
+        btnComment = (Button) findViewById(R.id.btnComment); 
+        linearLayout = (LinearLayout) findViewById(R.id.linearLayout4); 
+        ratingLayout = (LinearLayout) findViewById(R.id.ratingLayout); 
+ 
+        </span><span class="s3">//locates the View Pager assigned to XML of this class</span><span class="s1"> 
+        adapter = </span><span class="s0">new </span><span class="s1">FragmentStatePagerAdapter(getSupportFragmentManager()) { 
+            @Override 
+            </span><span class="s0">public </span><span class="s1">Fragment getItem(</span><span class="s0">int </span><span class="s1">position) { 
+                </span><span class="s0">return </span><span class="s1">browserFragment.newInstance(toVisit[position]); 
+                </span><span class="s3">//calls the browserFragment method newInstance to traverse the list of notes content url</span><span class="s1"> 
+                </span><span class="s3">//prepared for selected topic</span><span class="s1"> 
+            } 
+ 
+            @Override 
+            </span><span class="s0">public int </span><span class="s1">getCount() { 
+                </span><span class="s0">return </span><span class="s1">toVisit.length; 
+            } 
+        }; 
+        viewPager.setAdapter(adapter); 
+ 
+        ViewPager.OnPageChangeListener rListener = </span><span class="s0">new </span><span class="s1">ViewPager.OnPageChangeListener() { 
+ 
+            </span><span class="s0">private int </span><span class="s1">selPageIndex = -</span><span class="s4">1</span><span class="s1">; 
+ 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onPageScrolled(</span><span class="s0">int </span><span class="s1">position, </span><span class="s0">float </span><span class="s1">positionOffset, </span><span class="s0">int </span><span class="s1">positionOffsetPixels) { 
+                </span><span class="s3">// if positionOffset is equal to the last page in the direction</span><span class="s1"> 
+                </span><span class="s0">if </span><span class="s1">(positionOffset == </span><span class="s4">0F</span><span class="s1">) { 
+                    </span><span class="s0">int </span><span class="s1">lastPage = adapter.getCount() - </span><span class="s4">1</span><span class="s1">; 
+                    </span><span class="s0">if </span><span class="s1">(position == lastPage) { 
+                        scrolledOnLastPage = </span><span class="s0">true</span><span class="s1">; 
+                        linearLayout.setVisibility(View.VISIBLE); 
+                        </span><span class="s3">//android.app.FragmentManager fragmentManager = getFragmentManager();</span><span class="s1"> 
+                        </span><span class="s3">//subject1.ratingFragment rf = new subject1.ratingFragment();</span><span class="s1"> 
+                        </span><span class="s3">//rf.show(fragmentManager, &quot;Rating topic&quot;);</span><span class="s1"> 
+                    } 
+                } 
+            } 
+ 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onPageSelected(</span><span class="s0">int </span><span class="s1">position) { 
+                selPageIndex = position; 
+            } 
+ 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onPageScrollStateChanged(</span><span class="s0">int </span><span class="s1">state) { 
+ 
+            } 
+        }; 
+</span><span class="s3">//wraps the onpage listener into the adapter</span><span class="s1"> 
+        viewPager.addOnPageChangeListener(rListener); 
+        Intent intent = getIntent(); 
+        topicTitle = intent.getStringExtra(</span><span class="s2">&quot;topic title&quot;</span><span class="s1">); 
+        setTitle(topicTitle); 
+        </span><span class="s0">final </span><span class="s1">String[] videoTitle = {</span><span class="s2">&quot;Atomic Weight and Mass&quot;</span><span class="s1">, </span><span class="s2">&quot;Mass and Weight Clarification&quot;</span><span class="s1">}; 
+        listView = (ListView) findViewById(R.id.listView3); 
+        </span><span class="s3">//list view content of all available video for the specific topic</span><span class="s1"> 
+        videoView = (VideoView) findViewById(R.id.videoView); 
+        </span><span class="s3">//videoView holds the currently tapped video</span><span class="s1"> 
+        topicVideo = </span><span class="s0">new </span><span class="s1">ArrayList&lt;String&gt;(); 
+        </span><span class="s3">//videos are initialized as an array of string i.e. video file locations</span><span class="s1"> 
+        </span><span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s4">0</span><span class="s1">; i &lt; videoTitle.length; i++) 
+            topicVideo.add(videoTitle[i]); 
+        </span><span class="s3">//video titles are loaded into the array list</span><span class="s1"> 
+        arrayAdapter = </span><span class="s0">new </span><span class="s1">ArrayAdapter&lt;String&gt;(TOPIC.</span><span class="s0">this</span><span class="s1">, android.R.layout.simple_list_item_1, topicVideo); 
+        </span><span class="s3">//array adapter is used to display the instances of available topic videos</span><span class="s1"> 
+        listView.setAdapter(arrayAdapter); 
+        </span><span class="s3">//list view of encapsulated topic videos</span><span class="s1"> 
+        listView.setOnItemClickListener(</span><span class="s0">new </span><span class="s1">AdapterView.OnItemClickListener() { 
+            </span><span class="s3">//when one of the video title is tapped</span><span class="s1"> 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onItemClick(AdapterView&lt;?&gt; parent, View view, </span><span class="s0">int </span><span class="s1">position, </span><span class="s0">long </span><span class="s1">id) { 
+                </span><span class="s0">if </span><span class="s1">(topicVideo.get(position) == videoTitle[</span><span class="s4">0</span><span class="s1">]) { 
+                    videoView.setVideoPath(</span><span class="s2">&quot;android.resource://&quot; </span><span class="s1">+ getPackageName() + </span><span class="s2">&quot;/&quot; </span><span class="s1">+ R.raw.mass1); 
+                    mediaController.setAnchorView(videoView); 
+                    videoView.setMediaController(mediaController); 
+                    videoView.start(); 
+                } </span><span class="s0">else if </span><span class="s1">(topicVideo.get(position) == videoTitle[</span><span class="s4">1</span><span class="s1">]) { 
+                    </span><span class="s3">//videoView.suspend();</span><span class="s1"> 
+                    videoView.setVideoPath(</span><span class="s2">&quot;android.resource://&quot; </span><span class="s1">+ getPackageName() + </span><span class="s2">&quot;/&quot; </span><span class="s1">+ R.raw.atom1); 
+                    mediaController = </span><span class="s0">new </span><span class="s1">MediaController(TOPIC.</span><span class="s0">this</span><span class="s1">); 
+                    mediaController.setAnchorView(videoView); 
+                    videoView.setMediaController(mediaController); 
+                    videoView.start(); 
+                } 
+</span><span class="s3">//TO DO: change to hashmap, so as to use the ID of video for retrieving</span><span class="s1"> 
+ 
+ 
+            } 
+        }); 
+        btnRate.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+                doRating(); 
+            } 
+        }); 
+    } 
+ 
+ 
+    </span><span class="s0">public void </span><span class="s1">doRating() { 
+</span><span class="s3">//On Rating Bar change listener ensures the user sees the rating value passed in real time</span><span class="s1"> 
+        </span><span class="s0">final </span><span class="s1">Dialog d = </span><span class="s0">new </span><span class="s1">Dialog(</span><span class="s0">this</span><span class="s1">); 
+        d.setTitle(</span><span class="s2">&quot;Rate this Topic&quot;</span><span class="s1">); 
+        d.setContentView(R.layout.rating_layout); 
+        btnRating = (Button)d.findViewById(R.id.btnRating); 
+        ratingBar = (RatingBar)d.findViewById(R.id.ratingBar); 
+        textView = (TextView)d.findViewById(R.id.txtValue); 
+        ratingBar.setOnRatingBarChangeListener(</span><span class="s0">new </span><span class="s1">RatingBar.OnRatingBarChangeListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onRatingChanged(RatingBar ratingBar, </span><span class="s0">float </span><span class="s1">rating, </span><span class="s0">boolean </span><span class="s1">fromUser) { 
+                textView.setText(</span><span class="s2">&quot;Rating Value: &quot; </span><span class="s1">+ String.valueOf(rating)); 
+                sharedPreferences = getApplicationContext().getSharedPreferences(</span><span class="s2">&quot;Rating&quot;</span><span class="s1">, Context.MODE_PRIVATE); 
+                SharedPreferences.Editor editor = sharedPreferences.edit(); 
+                editor.putFloat(</span><span class="s2">&quot;Rating&quot;</span><span class="s1">, rating); 
+                editor.commit(); 
+            } 
+        }); 
+        btnRating.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+                Float val = sharedPreferences.getFloat(</span><span class="s2">&quot;Rating&quot;</span><span class="s1">, </span><span class="s4">0</span><span class="s1">); 
+                addRating(topicTitle, val); 
+                Toast.makeText(getApplicationContext(),</span><span class="s2">&quot;Thanks for rating &quot;</span><span class="s1">+topicTitle+</span><span class="s2">&quot;, value successfully sent&quot;</span><span class="s1">,Toast.LENGTH_SHORT).show(); 
+                d.dismiss(); 
+            } 
+        }); 
+        d.show(); 
+    } 
+    </span><span class="s0">public void </span><span class="s1">addRating(String title, </span><span class="s0">float </span><span class="s1">val){ 
+        Firebase firebase = </span><span class="s0">new </span><span class="s1">Firebase(addsubject.DB_URL); 
+        ratingData rd = </span><span class="s0">new </span><span class="s1">ratingData(); 
+        rd.setTitle(title); 
+        rd.setValue(val); 
+        </span><span class="s3">//get the subject to rate using intent</span><span class="s1"> 
+ 
+        String subjectName = getIntent().getStringExtra(</span><span class="s2">&quot;Subject&quot;</span><span class="s1">); 
+        Log.i(</span><span class="s2">&quot;HIV CHeck&quot;</span><span class="s1">,subjectName+</span><span class="s2">&quot; &quot;</span><span class="s1">+rd.getValue()); 
+        </span><span class="s3">//the child is suppose to be a person, a teacher making the rating</span><span class="s1"> 
+        firebase.child(</span><span class="s2">&quot;Ratings&quot;</span><span class="s1">).child(subjectName).child(topicTitle).setValue(rd.getValue()); 
+    } 
+} 
+ 
+</span></pre>
+</body>
+</html>

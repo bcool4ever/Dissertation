@@ -1,0 +1,134 @@
+<html>
+<head>
+<title>LoginActivity.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(0,128,0); font-weight: bold; }
+.s3 { color: rgb(128,128,128); font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+LoginActivity.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.olayiwola.dissertation; 
+ 
+</span><span class="s0">import </span><span class="s1">android.app.AlertDialog; 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.content.pm.ActivityInfo; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.support.annotation.NonNull; 
+</span><span class="s0">import </span><span class="s1">android.support.design.widget.FloatingActionButton; 
+</span><span class="s0">import </span><span class="s1">android.support.design.widget.Snackbar; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.widget.Toolbar; 
+</span><span class="s0">import </span><span class="s1">android.text.TextUtils; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.EditText; 
+</span><span class="s0">import </span><span class="s1">android.widget.Toast; 
+ 
+ 
+</span><span class="s0">import </span><span class="s1">com.firebase.client.Firebase; 
+</span><span class="s0">import </span><span class="s1">com.google.android.gms.auth.api.Auth; 
+</span><span class="s0">import </span><span class="s1">com.google.android.gms.auth.api.signin.GoogleSignInOptions; 
+</span><span class="s0">import </span><span class="s1">com.google.android.gms.common.api.GoogleApiClient; 
+</span><span class="s0">import </span><span class="s1">com.google.android.gms.tasks.OnCompleteListener; 
+</span><span class="s0">import </span><span class="s1">com.google.android.gms.tasks.Task; 
+</span><span class="s0">import </span><span class="s1">com.google.firebase.auth.AuthResult; 
+</span><span class="s0">import </span><span class="s1">com.google.firebase.auth.FirebaseAuth; 
+</span><span class="s0">import </span><span class="s1">com.google.firebase.auth.FirebaseUser; 
+ 
+</span><span class="s0">import </span><span class="s1">org.json.JSONException; 
+</span><span class="s0">import </span><span class="s1">org.json.JSONObject; 
+ 
+</span><span class="s0">public class </span><span class="s1">LoginActivity </span><span class="s0">extends </span><span class="s1">AppCompatActivity { 
+ 
+    </span><span class="s0">private </span><span class="s1">FirebaseAuth auth; 
+    </span><span class="s0">private </span><span class="s1">FirebaseAuth.AuthStateListener authStateListener; 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
+        setContentView(R.layout.activity_login); 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar); 
+        setSupportActionBar(toolbar); 
+        Firebase.setAndroidContext(</span><span class="s0">this</span><span class="s1">); 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab); 
+        fab.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onClick(View view) { 
+                Snackbar.make(view, </span><span class="s2">&quot;Replace with your own action&quot;</span><span class="s1">, Snackbar.LENGTH_LONG) 
+                        .setAction(</span><span class="s2">&quot;Action&quot;</span><span class="s1">, </span><span class="s0">null</span><span class="s1">).show(); 
+            } 
+        }); 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(</span><span class="s0">true</span><span class="s1">); 
+        </span><span class="s0">final </span><span class="s1">EditText username = (EditText) findViewById(R.id.Email); 
+        </span><span class="s0">final </span><span class="s1">EditText password = (EditText) findViewById(R.id.Password); 
+        </span><span class="s0">final </span><span class="s1">Button Login = (Button) findViewById(R.id.btnLogin); 
+ 
+        </span><span class="s3">//initialize by creating instant of firebase auth mechanism</span><span class="s1"> 
+        auth = FirebaseAuth.getInstance(); 
+        </span><span class="s0">final </span><span class="s1">FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); 
+        </span><span class="s3">//initialize the authentication listener, to be used in getting current user if exists</span><span class="s1"> 
+        authStateListener = </span><span class="s0">new </span><span class="s1">FirebaseAuth.AuthStateListener() { 
+            </span><span class="s0">public void </span><span class="s1">onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) { 
+                </span><span class="s3">//Firebase fb = new Firebase(&quot;https://notedsdb.firebase.com&quot;);</span><span class="s1"> 
+                </span><span class="s0">if </span><span class="s1">(user != </span><span class="s0">null</span><span class="s1">) { 
+                    Intent intent = </span><span class="s0">new </span><span class="s1">Intent(LoginActivity.</span><span class="s0">this</span><span class="s1">, TOC.</span><span class="s0">class</span><span class="s1">); 
+                    startActivity(intent); 
+                    finish(); 
+                } 
+            } 
+        }; 
+ 
+        Login.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+                </span><span class="s0">final </span><span class="s1">String email = username.getText().toString(); 
+                </span><span class="s0">final </span><span class="s1">String pass = password.getText().toString(); 
+ 
+                </span><span class="s3">//http://www.androidhive.info/2016/06/android-getting-started-firebase-simple-login-registration-auth/</span><span class="s1"> 
+                </span><span class="s3">//Code pattern copied from above</span><span class="s1"> 
+                </span><span class="s0">if</span><span class="s1">(TextUtils.isEmpty(email)){ 
+                    Toast.makeText(getApplicationContext(), </span><span class="s2">&quot;Enter email address&quot;</span><span class="s1">,Toast.LENGTH_SHORT).show(); 
+                    </span><span class="s0">return</span><span class="s1">; 
+                } 
+                </span><span class="s0">if</span><span class="s1">(TextUtils.isEmpty(pass)){ 
+                    Toast.makeText(getApplicationContext(),</span><span class="s2">&quot;Enter password&quot;</span><span class="s1">,Toast.LENGTH_SHORT).show(); 
+                    </span><span class="s0">return</span><span class="s1">; 
+                } 
+                auth.signInWithEmailAndPassword(email,pass) 
+                        .addOnCompleteListener(LoginActivity.</span><span class="s0">this</span><span class="s1">, </span><span class="s0">new </span><span class="s1">OnCompleteListener&lt;AuthResult&gt;() { 
+                            @Override 
+                            </span><span class="s0">public void </span><span class="s1">onComplete(Task&lt;AuthResult&gt; task) { 
+                                </span><span class="s3">//If sign in fails, a toast will display the failure</span><span class="s1"> 
+                            </span><span class="s0">if</span><span class="s1">(!task.isSuccessful()) { 
+                                Toast.makeText(LoginActivity.</span><span class="s0">this</span><span class="s1">, </span><span class="s2">&quot;Login Failed&quot;</span><span class="s1">, Toast.LENGTH_SHORT).show(); 
+                                } 
+                            </span><span class="s0">else</span><span class="s1">{ 
+                                Intent intent = </span><span class="s0">new </span><span class="s1">Intent(getApplicationContext(),addsubject.</span><span class="s0">class</span><span class="s1">); 
+                                startActivity(intent); 
+                                </span><span class="s3">//finish();</span><span class="s1"> 
+                            } 
+ 
+                            } 
+                        }); 
+            } 
+        }); 
+ 
+ 
+ 
+    } 
+ 
+} 
+</span></pre>
+</body>
+</html>

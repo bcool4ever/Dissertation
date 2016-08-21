@@ -1,0 +1,104 @@
+<html>
+<head>
+<title>Quiz.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(0,128,0); font-weight: bold; }
+.s3 { color: rgb(128,128,128); font-style: italic; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+Quiz.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.olayiwola.dissertation; 
+ 
+</span><span class="s0">import </span><span class="s1">android.content.Intent; 
+</span><span class="s0">import </span><span class="s1">android.content.pm.ActivityInfo; 
+</span><span class="s0">import </span><span class="s1">android.database.Cursor; 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabase; 
+</span><span class="s0">import </span><span class="s1">android.database.sqlite.SQLiteDatabaseLockedException; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.support.design.widget.FloatingActionButton; 
+</span><span class="s0">import </span><span class="s1">android.support.design.widget.Snackbar; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.support.v7.widget.Toolbar; 
+</span><span class="s0">import </span><span class="s1">android.util.Log; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.webkit.WebView; 
+</span><span class="s0">import </span><span class="s1">android.webkit.WebViewClient; 
+ 
+</span><span class="s0">import </span><span class="s1">com.firebase.client.Firebase; 
+ 
+</span><span class="s0">import </span><span class="s1">java.nio.channels.WritableByteChannel; 
+ 
+ 
+</span><span class="s0">public class </span><span class="s1">Quiz </span><span class="s0">extends </span><span class="s1">AppCompatActivity { 
+ 
+    </span><span class="s0">int </span><span class="s1">topicid; 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); 
+        setContentView(R.layout.activity_quiz); 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar); 
+ 
+        setSupportActionBar(toolbar); 
+ 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab); 
+        fab.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onClick(View view) { 
+                Snackbar.make(view, </span><span class="s2">&quot;Replace with your own action&quot;</span><span class="s1">, Snackbar.LENGTH_LONG) 
+                        .setAction(</span><span class="s2">&quot;Action&quot;</span><span class="s1">, </span><span class="s0">null</span><span class="s1">).show(); 
+            } 
+        }); 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(</span><span class="s0">true</span><span class="s1">); 
+        Intent intent = getIntent(); 
+        setTitle(intent.getStringExtra(</span><span class="s2">&quot;topic title&quot;</span><span class="s1">)); 
+        topicid = Integer.parseInt(intent.getStringExtra(</span><span class="s2">&quot;topic position&quot;</span><span class="s1">)); 
+        WebView myWebView = (WebView)findViewById(R.id.webView); 
+        myWebView.getSettings().setJavaScriptEnabled(</span><span class="s0">true</span><span class="s1">); 
+</span><span class="s3">/* 
+        try{ 
+            //SQLiteDatabase mySQL = this.openOrCreateDatabase(&quot;Notes&quot;,MODE_PRIVATE,null); 
+            Firebase ref = new Firebase(&quot;https://notedsdb.firebaseio.com/&quot;); 
+            mySQL.execSQL(&quot;CREATE TABLE IF NOT EXISTS topicQuiz (id INTEGER, url VARCHAR)&quot;); 
+            mySQL.execSQL(&quot;INSERT INTO topicQuiz (id,url) VALUES (1,'http://www.gradegorilla.com/AQA_Mains2/A_Mains1.php')&quot;); 
+            mySQL.execSQL(&quot;INSERT INTO topicQuiz (id,url) VALUES (2,'http://www.gradegorilla.com/AQA_Mains2/A_Mains1.php')&quot;); 
+            mySQL.execSQL(&quot;INSERT INTO topicQuiz (id,url) VALUES (3,'http://www.gradegorilla.com/AQA_Mains2/A_Mains1.php')&quot;); 
+            mySQL.execSQL(&quot;INSERT INTO topicQuiz (id,url) VALUES (4,'http://gradegorilla.com/E_Particles2/E_Particles1.php')&quot;); 
+            mySQL.execSQL(&quot;INSERT INTO topicQuiz (id,url) VALUES (5,'http://gradegorilla.com/E_light2/E_light1.php')&quot;); 
+            mySQL.execSQL(&quot;INSERT INTO topicQuiz (id,url) VALUES (6,'http://gradegorilla.com/E_WavesE2/E_wavesE1.php')&quot;); 
+            mySQL.execSQL(&quot;INSERT INTO topicQuiz (id,url) VALUES (7,'http://gradegorilla.com/OCR_Forces2/O_Forces1.php')&quot;); 
+            mySQL.execSQL(&quot;INSERT INTO topicQuiz (id,url) VALUES (8,'http://gradegorilla.com/E_Energy2_2/E_Energy1.php')&quot;); 
+            mySQL.execSQL(&quot;INSERT INTO topicQuiz (id,url) VALUES (9,'http://gradegorilla.com/OCR_Mains2/O_Mains1.php')&quot;); 
+            mySQL.execSQL(&quot;INSERT INTO topicQuiz (id,url) VALUES (10,'http://gradegorilla.com/E_Radioactivity3/E_Radioactivity1.php')&quot;); 
+            //mySQL.execSQL(&quot;DELETE FROM topicQuiz&quot;); 
+            Cursor c = mySQL.rawQuery(&quot;SELECT * FROM topicQuiz where id ='&quot;+(topicid+1)+&quot;'&quot;,null); 
+            int idIndex = c.getColumnIndex(&quot;id&quot;); 
+            int urlIndex = c.getColumnIndex(&quot;url&quot;); 
+            c.moveToFirst(); 
+               myWebView.setWebViewClient(new WebViewClient()); 
+            Log.i(&quot;Tapped URL: &quot;,c.getString(urlIndex)); 
+               myWebView.loadUrl(c.getString(urlIndex)); 
+            subjectTopic topic = new subjectTopic(1,&quot;http://www.gradegorilla.com/AQA_Mains2/A_Mains1.php&quot;); 
+            ref.setValue(topic); 
+        }catch (Exception e){ 
+            e.printStackTrace(); 
+ 
+        }*/</span><span class="s1"> 
+ 
+    } 
+ 
+} 
+</span></pre>
+</body>
+</html>

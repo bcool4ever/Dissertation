@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Dissertation</string>
+    <string name="title_activity_topic">TOPIC</string>
+    <string name="title_activity_news_today">News Today</string>
+    <string name="title_activity_toc">Table of Content</string>
+    <string name="vanguardtitle">Vanguard Newspaper</string>
+    <string name="imgPunch">Punch Newspaper</string>
+    <string name="imgNation">Nation Newspaper</string>
+    <string name="imgPtimes">Premium Times Newspaper</string>
+    <string name="imgSahara">Sahara Reporters Newspaper</string>
+    <string name="txtCaption">Drag down to refresh News!</string>
+    <string name="title_activity_quiz">Quiz</string>
+    <string name="title_activity_news_details">NewsDetails</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_subject">subject</string>
+
+    <!-- Strings related to login -->
+
+</resources>

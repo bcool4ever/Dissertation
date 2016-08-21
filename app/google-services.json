@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "463019538743",
+    "firebase_url": "https://notedsdb.firebaseio.com",
+    "project_id": "notedsdb",
+    "storage_bucket": "notedsdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463019538743:android:673cd1906630ec92",
+        "android_client_info": {
+          "package_name": "com.example.olayiwola.dissertation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "463019538743-gv5m6j0kkp8pt8focjg608cs926neqpp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnyjo4D-DeedEx95AXzGRrbD00394h1JI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

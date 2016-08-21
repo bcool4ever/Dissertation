@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>addsubject.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: rgb(0,0,0); font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#C0C0C0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+addsubject.java</FONT>
+</center></TD></TR></TABLE>
+<pre>
+
+<span class="s0">package </span><span class="s1">com.example.olayiwola.dissertation; 
+ 
+</span><span class="s0">import </span><span class="s1">android.support.v7.app.AppCompatActivity; 
+</span><span class="s0">import </span><span class="s1">android.os.Bundle; 
+</span><span class="s0">import </span><span class="s1">android.view.View; 
+</span><span class="s0">import </span><span class="s1">android.widget.ArrayAdapter; 
+</span><span class="s0">import </span><span class="s1">android.widget.Button; 
+</span><span class="s0">import </span><span class="s1">android.widget.EditText; 
+ 
+</span><span class="s0">import </span><span class="s1">com.firebase.client.ChildEventListener; 
+</span><span class="s0">import </span><span class="s1">com.firebase.client.DataSnapshot; 
+</span><span class="s0">import </span><span class="s1">com.firebase.client.Firebase; 
+</span><span class="s0">import </span><span class="s1">com.firebase.client.FirebaseError; 
+ 
+</span><span class="s0">import </span><span class="s1">data.subjectData; 
+ 
+</span><span class="s0">import </span><span class="s1">java.sql.SQLException; 
+</span><span class="s0">import </span><span class="s1">java.util.ArrayList; 
+ 
+</span><span class="s0">import </span><span class="s1">data.subjectController; 
+ 
+</span><span class="s0">public class </span><span class="s1">addsubject </span><span class="s0">extends </span><span class="s1">AppCompatActivity { 
+ 
+    EditText subName; 
+    Firebase subject; 
+    Button b; 
+ 
+    </span><span class="s2">//points to the datastore</span><span class="s1"> 
+    </span><span class="s0">final static </span><span class="s1">String DB_URL = </span><span class="s3">&quot;https://notedsdb.firebaseio.com/&quot;</span><span class="s1">; 
+ 
+    @Override 
+    </span><span class="s0">protected void </span><span class="s1">onCreate(Bundle savedInstanceState) { 
+        </span><span class="s0">super</span><span class="s1">.onCreate(savedInstanceState); 
+        setTitle(</span><span class="s3">&quot;Add Record&quot;</span><span class="s1">); 
+        setContentView(R.layout.activity_addsubject); 
+        Firebase.setAndroidContext(</span><span class="s0">this</span><span class="s1">); 
+        subName = (EditText) findViewById(R.id.txtTitle); 
+        b = (Button) findViewById(R.id.btnSave); 
+        subject = </span><span class="s0">new </span><span class="s1">Firebase(DB_URL); 
+        b.setOnClickListener(</span><span class="s0">new </span><span class="s1">View.OnClickListener() { 
+            @Override 
+            </span><span class="s0">public void </span><span class="s1">onClick(View v) { 
+                addSub(subName.getText().toString()); 
+                subName.setText(</span><span class="s3">&quot;&quot;</span><span class="s1">); 
+            } 
+        }); 
+    } 
+    </span><span class="s2">//instantiate subject class to add data</span><span class="s1"> 
+    </span><span class="s0">private void </span><span class="s1">addSub(String title){ 
+        subjectData sData = </span><span class="s0">new </span><span class="s1">subjectData(); 
+        sData.setTitle(title); 
+ 
+        subject.child(</span><span class="s3">&quot;Subjects&quot;</span><span class="s1">).child(title).setValue(sData); 
+    } 
+ 
+} 
+</span></pre>
+</body>
+</html>

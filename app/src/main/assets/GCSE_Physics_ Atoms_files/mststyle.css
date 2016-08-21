@@ -1,0 +1,7 @@
+BODY {font-family: Verdana, Arial, Helvetica, sans-serif;}
+BIG.HEAD {color:#009999; font-weight:bold}
+H1 {font-weight: bold; color: #FFFFFF}
+P {font-weight: bold; color: #FFFFFF}
+H2 {font-weight: bold; color: #FFFFFF}
+A:hover {color:#000000; background:#FFFFFF}
+A.NON:hover {color:#FF0000; background:#000000}
